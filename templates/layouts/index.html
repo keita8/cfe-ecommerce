@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href=" {% static 'css/style.css' %} ">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li> <a href="{% url 'products:shop' %} ">Shop</a> </li>
+                    <li> <a href=" {% url 'cart:index' %} ">Panier  {{ request.session.cart_items }}  </a> </li>
+
+                    {% if request.user.is_authenticated %}
+                        
+                    <li><a href="{% url 'accounts:logout' %}">Quitter</a></li>
+
+                    <li>
+                        <small>Connecté en tant que <strong> {{ request.user }} </strong> </small>
+                    </li>
+                                            
+                    {% else %}
+
+                    <li><a href="{% url 'accounts:register' %}">S'incrire</a></li>
+                    <li><a href="{% url 'accounts:login' %}">Se connecter</a></li>
+                        
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        {% lorem 3 p random %}
+        <img src=" {% static 'img/beach.jpg' %} ">
+        <script src="" async defer></script>
+    </body>
+</html>

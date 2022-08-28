@@ -1,0 +1,18 @@
+{% for article in object_list %}
+{% comment %} 
+<a href-"{{ article.get_absolute_url }}">
+    {{ article.title }}
+</a> {% endcomment %}
+
+<img src=" {{ article.image.url }} ">
+<a href=" {{ article.get_absolute_url }} ">
+{{ article.title }}
+</a>
+
+
+
+{% endfor %}
+
+<p>
+    <a href="{% url 'index' %}">Accueil</a>
+</p>

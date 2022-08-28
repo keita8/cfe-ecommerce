@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h1 style="text-align: center;">Panier ({{ request.session.cart_items }} ) </h1>
+        <h2>
+            <small> 
+                <a href="{% url 'index' %}">Accueil</a>
+            </small>
+        </h2>
+        <h3>
+            <a href="{% url 'products:shop' %}">Boutique</a>   
+        </h3>
+
+        
+        {% if cart.products.exists %}
+            <table>
+                <thead>
+                    <tr>
+                        <td>Article</td>
+                        <td>Prix</td>
+                        <td>Total</td>
+                    </tr>
+                </thead>
+            </table>
+            
+            {% for product in cart.products.all %}
+                {{ forloop.counter }}
+                {% include '../cart/update-cart.html' with product=product cart=cart in_cart=True %}
+                <br>
+                &nbsp;
+                <strong> <a href="{{ product.get_absolute_url }}">{{ product.title }}  </a> </strong>
+                <p> {{ product.price|floatformat:2 }} GNF </p>
+                <img src=" {{ product.image.url }} " alt="image">
+                <br>
+                <br>
+            {% endfor %}
+
+            <p>Sous total : {{ cart.subtotal }} </p>
+            <br>
+            <p><strong>Total : {{ cart.total|floatformat:2 }} GNF </strong></p>
+
+            <p>
+                <a href="{% url 'cart:checkout' %}">Commander</a>
+            </p>
+                
+        {% else %}
+            <p style="text-align: center;">Votre panier est vide</p>
+            <a href="{% url 'index' %}">Accueil</a>
+        {% endif %}
+
+
+        <script src="" async defer></script>
+    </body>
+</html>

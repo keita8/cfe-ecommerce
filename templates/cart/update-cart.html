@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter au panier</title>
+</head>
+<body>
+    <form action="{% url 'cart:update' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        
+        {% if in_cart %}
+        <button type="submit" >Retirer ?</button>
+        {% else %}
+            
+            {% if product in cart.products.all %}
+                <p>Article deja dans le panier</p> <button type="submit" >Ajouter encore ?</button>
+            {% else %}
+                <button type="submit">Ajouter au panier </button>
+            {% endif %}
+        
+        {% endif %}
+
+    </form>
+        
+
+</body>
+</html>
