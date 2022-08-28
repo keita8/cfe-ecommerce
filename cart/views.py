@@ -64,19 +64,17 @@ def checkout(request):
     guest_email_id = request.session.get('guest_email_id')
     
     if user.is_authenticated:
+        # utilisateur connecté et se rappeler de sa méthode de paiement
         billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
     elif guest_email_id is not None:
+        # connecté en tant qu'invité et gestion de méthode  de paiement
         guest_email_obj = GuestEmail.objects.get(id=guest_email_id)
         billing_profile, billing_guest_profile_created = BillingProfile.objects.get_or_create(email=guest_email_obj.email)
     else:
         pass
-    
+
     if billing_profile is not None:
-        order_qs = Order.objects.filter(cart=cart_obj, active=True)
-        if order_qs.exists():
-            order_qs.update(active=False)
-        else:
-            order_obj = Order.objects.create(cart=cart_obj, billing_profile=billing_profile)
+        order_obj, order_obj_created = Order.objects.new_or_get(billing_profile, cart_obj)
         
     template_name = 'cart/checkout.html'
     context = {
