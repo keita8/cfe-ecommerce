@@ -67,7 +67,10 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
         total = 0
         quantity = 0
         for x in products:
-            total += x.price
+            total += x.price 
+            
+            # I want to compute quantity and price together but, I got some trouble. Please check me this code.
+            # total += Decimal(x.price) * Decimal(x.quantity)
         
 
         if instance.subtotal != total:
