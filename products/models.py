@@ -74,10 +74,10 @@ class Product(models.Model):
     active      = models.BooleanField(default=True)
     quantity    = models.IntegerField(
                 default=1, 
-                verbose_name='Quantié commandée',
+                verbose_name='Quantité commandée',
                 validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)]
                 )
-    quantity    = models.IntegerField(
+    stock       = models.IntegerField(
                 default=1, 
                 verbose_name='En stock',
                 validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)]
