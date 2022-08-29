@@ -13,6 +13,7 @@ urlpatterns = [
     path('shop/', include('products.urls')),
     path('orders/', include('orders.urls')),
     path('billing/', include('billing.urls')),
+    path('address/', include('address.urls')),
     path('cart/', include('cart.urls')),
     path('tinymce', include('tinymce.urls')),
 ]
