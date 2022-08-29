@@ -1,4 +1,5 @@
-from tabnanny import verbose
+from unicodedata import category
+from django.db.models import Q
 from decimal import Decimal
 from math import fsum
 from django.db import models
@@ -10,7 +11,9 @@ import random
 from tinymce.models import HTMLField
 import string
 import os
+from category.models import Categorie
 from .utils import unique_slug_generator
+from upload.models import Image
 
 
 def get_filename_ext(filepath):
@@ -31,6 +34,10 @@ class ProductQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(active=True)
     
+    def search(self, query):
+        lookups = Q(title__icontains=query) | Q(description__icontains=query)
+        return self.filter(lookups).distinct()
+    
     def featured(self):
         return self.filter(feature=True)
     
@@ -44,6 +51,9 @@ class ProductManager(models.Manager):
     
     def features(self):
         return self.get_queryset().featured()
+    
+    def search(self, query):
+        return self.get_queryset().active().search(query)
     
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
@@ -62,13 +72,17 @@ class Product(models.Model):
                 validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)],
                 verbose_name='Prix unitaire'
                 )
-    image       = models.FileField(
-                upload_to=upload_image_path,
-                validators=[FileExtensionValidator( ['jpg', 'png'] )],
-                blank=True,
-                null=True, 
+    image       = models.ManyToManyField(
+                Image,
                 verbose_name='Image'
                 )
+    # image       = models.FileField(
+    #             upload_to=upload_image_path,
+    #             validators=[FileExtensionValidator( ['jpg', 'png'] )],
+    #             blank=True,
+    #             null=True, 
+    #             verbose_name='Image'
+    #             )
     
     feature     = models.BooleanField(default=False)
     active      = models.BooleanField(default=True)
@@ -82,6 +96,7 @@ class Product(models.Model):
                 verbose_name='En stock',
                 validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)]
                 )
+    category    = models.ManyToManyField(Categorie, verbose_name='Catégories')
     timestamp   = models.DateTimeField(auto_now_add=True, verbose_name='Date de création')
     
     objects = ProductManager()
