@@ -7,7 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Shipping address form</h1>
     <form method="POST" action=" {% if action_url %} {{ action_url }} {% else %}  {% url 'accounts:login' %} {% endif %}  ">
         {% csrf_token %}
         

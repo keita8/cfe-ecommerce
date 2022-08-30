@@ -6,6 +6,7 @@ from products.utils import unique_order_id_generator
 import math
 from django.db.models.signals import pre_save, post_save
 from billing.models import BillingProfile
+from address.models import Address
 
 
 class OrderManager(models.Manager):
@@ -32,7 +33,9 @@ ORDER_STATUS_CHOICES = (
 
 class Order(models.Model):
     order_id       = models.CharField(max_length=150, verbose_name="N° de la commande", blank=True)
-    billing_profile=models.ForeignKey(BillingProfile, on_delete=models.SET_NULL, null=True)
+    billing_profile=models.ForeignKey(BillingProfile, on_delete=models.SET_NULL, null=True, verbose_name='Client')
+    shipping_address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True, related_name='shipping_address', verbose_name='Adresse de livraison')
+    billing_address  = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True, related_name='billing_address', verbose_name='Adresse de facturation')
     cart           = models.ForeignKey(Cart, on_delete=models.CASCADE, verbose_name="Panier")
     status         = models.CharField(max_length=100, default="created", choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(default=9.99, max_digits=100, decimal_places=2, verbose_name='Frais de livraison')
@@ -55,6 +58,17 @@ class Order(models.Model):
         self.total = formatted_total
         self.save()
         return new_total
+        
+    
+    def check_done(self):
+        billing_profile = self.billing_profile
+        shipping_address = self.shipping_address
+        billing_address = self.billing_address
+        total           = self.total
+        
+        if billing_profile and billing_address and shipping_address and total > 0:
+            return True
+        else: False
         
         
     def __str__(self):

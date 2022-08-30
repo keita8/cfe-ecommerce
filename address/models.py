@@ -1,6 +1,7 @@
 from tabnanny import verbose
 from django.db import models
 from billing.models import BillingProfile
+from django_countries.fields import CountryField
 
 ADDRESS_TYPE = (
     ('billing', 'Facturation'),
@@ -12,7 +13,7 @@ class Address(models.Model):
     address_type    = models.CharField(max_length=120, verbose_name="Type d'adresse", choices=ADDRESS_TYPE)
     address_line_1  = models.CharField(max_length=120, verbose_name="Adresse 1")
     address_line_2  = models.CharField(max_length=120, verbose_name="Adresse 2", blank=True, null=True)
-    country         = models.CharField(max_length=120, verbose_name="Pays", blank=True, null=True, default="United States Of America")
+    country = CountryField()
     city            = models.CharField(max_length=120, verbose_name="Ville")
     state           = models.CharField(max_length=120, verbose_name="Etat")
     postal_code     = models.CharField(max_length=120, verbose_name="Code postale")

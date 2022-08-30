@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'search',
     'tags',
     'tinymce',
+    'django_countries',
 ]
 
 MIDDLEWARE = [

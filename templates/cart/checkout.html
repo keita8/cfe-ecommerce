@@ -23,14 +23,20 @@
     {% else %}
     
         {% if not object.shipping_address %}
-            
-            {% url 'accounts:guest' as guest_register_url %}
-            {% include 'address/form.html' with form=address_form next_url=request.build_absolute_uri action_url=guest_register_url %}
-        
+            <h1>Adresse de livraison</h1>
+            {% url 'accounts:guest' as checkout_address_create %}
+            {% url 'address:index' as address_checkout_url %}
+            {% include 'address/form.html' with form=address_form next_url=request.build_absolute_uri action_url=address_checkout_url address_type='shipping' %}
+            <br>
+            <hr>
+        {% elif not object.billing_address %}
+            <h1>Adresse de facturation</h1>
+            {% url 'accounts:guest' as checkout_address_create %}
+            {% url 'address:index' as address_checkout_url %}
+            {% include 'address/form.html' with form=address_form next_url=request.build_absolute_uri action_url=address_checkout_url address_type='billing' %}
         {% else %}
-            
             <div style="margin: 20px auto;">
-                <h1>Details de votre commande</h1>
+                <h1>Terminé votre paiement</h1>
                 <br>
             
                 <p>
@@ -44,8 +50,9 @@
                 <p>
                     Total  <strong> {{ object.total }} </strong>
                 </p>
-            </div>
 
+                <button>Valider</button>
+            </div>
         {% endif %}
     {% endif %}
 </body>
