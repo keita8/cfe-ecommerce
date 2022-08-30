@@ -7,15 +7,21 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Shipping address form</h1>
     <form method="POST" action=" {% if action_url %} {{ action_url }} {% else %}  {% url 'accounts:login' %} {% endif %}  ">
         {% csrf_token %}
         
         {% if next_url %}
             <input type="hidden" name="next" value="{{ next_url }}">
         {% endif %}
+
+
+        {% if address_type %}
+            <input type="hidden" name="address_type" value="{{ address_type }}">
+        {% endif %}
             
     
-        {{ form }}
+        {{ form.as_p }}
         
         <input type="submit" value="Valider">
     </form>

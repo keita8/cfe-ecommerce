@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'billing',
     'address',
     'search',
+    'tags',
     'tinymce',
 ]
 

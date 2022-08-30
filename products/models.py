@@ -35,7 +35,10 @@ class ProductQuerySet(models.query.QuerySet):
         return self.filter(active=True)
     
     def search(self, query):
-        lookups = Q(title__icontains=query) | Q(description__icontains=query)
+        lookups = (
+            Q(title__icontains=query) | 
+            Q(description__icontains=query) | 
+            Q(tag__title__icontains=query)) # ici on recupère les tags associés aux articles 
         return self.filter(lookups).distinct()
     
     def featured(self):
@@ -72,25 +75,20 @@ class Product(models.Model):
                 validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)],
                 verbose_name='Prix unitaire'
                 )
-    image       = models.ManyToManyField(
-                Image,
-                verbose_name='Image'
-                )
-    # image       = models.FileField(
+    # photo       = models.FileField(
     #             upload_to=upload_image_path,
     #             validators=[FileExtensionValidator( ['jpg', 'png'] )],
     #             blank=True,
     #             null=True, 
     #             verbose_name='Image'
     #             )
+    image       = models.ManyToManyField(
+                Image,
+                verbose_name='Image'
+                )
     
     feature     = models.BooleanField(default=False)
     active      = models.BooleanField(default=True)
-    quantity    = models.IntegerField(
-                default=1, 
-                verbose_name='Quantité commandée',
-                validators=[MaxValueValidator(1000000000000000000), MinValueValidator(1)]
-                )
     stock       = models.IntegerField(
                 default=1, 
                 verbose_name='En stock',
@@ -105,18 +103,8 @@ class Product(models.Model):
         verbose_name = 'Article'
         verbose_name_plural = 'Articles'
 
-    # @property
-    # def subtotal(self):
-    #     total = 0.00
-    #     total += fsum([self.quantity, self.price])
-    #     return total
-        
-        
-    
     def get_absolute_url(self):
-        return reverse("products:detail", kwargs={"pk": self.pk, 'slug':self.slug})
-    
-        
+        return reverse("products:detail", kwargs={"pk": self.pk, 'slug':self.slug})   
     
     def __str__(self):
         return f" {self.title} " 
@@ -129,4 +117,4 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 
-pre_save.connect(product_pre_save_receiver, sender=Product)
+pre_save.connect(product_pre_save_receiver, sender=Product) 

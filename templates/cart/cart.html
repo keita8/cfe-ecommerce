@@ -38,7 +38,7 @@
                 &nbsp;
                 <strong> <a href="{{ product.get_absolute_url }}">{{ product.title }}  </a> </strong>
                 <p> {{ product.price|floatformat:2 }} GNF </p>
-                <img src=" {{ product.image.url }} " alt="image">
+                <img src="{{ product.image.all.first.image.url }}" alt="">
                 <br>
                 <br>
             {% endfor %}

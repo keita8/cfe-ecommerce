@@ -4,9 +4,19 @@
     {{ article.title }}
 </a> {% endcomment %}
 
-<img src=" {{ article.image.url }} ">
-<a href=" {{ article.get_absolute_url }} ">
-{{ article.title }}
+    <img src=" {{ article.image.all.first.image.url }} " alt="{{ article.title }}">
+
+    <a href=" {{ article.get_absolute_url }} ">
+    {{ article.title }}
+    
+    {% for cat in article.category.all %}        
+    <p>
+        {{ cat.category_name }}
+    </p>
+    {% endfor %}
+
+
+    
 </a>
 
 

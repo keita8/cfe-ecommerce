@@ -15,8 +15,15 @@
             {{ object.title }}
         </h1>
 
+        <p>
+            {{ object.image.all }}
+        </p>
 
-        <img src=" {{ object.image.url }} ">
+        {% for item in object.image.all %}
+        
+        <img src="{{ item.image.url }}" alt=" {{ item.name }} ">
+                    
+        {% endfor %}
 
 
         <p>

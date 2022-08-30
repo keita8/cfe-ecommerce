@@ -20,7 +20,7 @@ def upload_image_path(instance, filename):
     return f"products/{new_filename}/{final_filename}"
 
 class Image(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name="Titre")
     image = VersatileImageField('Image',
                                 upload_to=upload_image_path,
                                 ppoi_field='image_ppoi', 
